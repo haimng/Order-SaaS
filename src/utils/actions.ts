@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { sql } from '@vercel/postgres';
+import { pgSql } from 'utils/pg';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from 'utils/auth';
@@ -80,6 +80,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
   console.log({ customerId, amount, amountInCents, status, date });
 
   try {
+    const sql = await pgSql();
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date)
       VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
@@ -111,6 +112,7 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
   console.log({ id, customerId, amount, amountInCents, status });
  
   try {
+    const sql = await pgSql();
     await sql`
       UPDATE invoices
       SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
@@ -127,6 +129,7 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
 
 export async function deleteInvoice(id: string) {    
   try {
+    const sql = await pgSql();
     await sql`DELETE FROM invoices WHERE id = ${id}`;
     revalidatePath('/dashboard/invoices');
     return { message: 'Deleted Invoice.' };

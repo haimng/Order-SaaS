@@ -1,13 +1,14 @@
-const { db } = require('@vercel/postgres');
-const {
+import bcrypt from 'bcrypt';
+import { isDevelopmentEnv } from '../src/utils/env';
+import { pgClient } from '../src/utils/pg';
+import {
   invoices,
   customers,
   revenue,
   users,
-} = require('./placeholder-data.js');
-const bcrypt = require('bcrypt');
+} from './placeholder-data.js';
 
-async function seedUsers(client) {
+async function seedUsers(client: any) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
     // Create the "users" table if it doesn't exist
@@ -24,7 +25,7 @@ async function seedUsers(client) {
 
     // Insert data into the "users" table
     const insertedUsers = await Promise.all(
-      users.map(async (user) => {
+      users.map(async (user: any) => {
         const hashedPassword = await bcrypt.hash(user.password, 10);
         return client.sql`
         INSERT INTO users (id, name, email, password)
@@ -46,7 +47,7 @@ async function seedUsers(client) {
   }
 }
 
-async function seedInvoices(client) {
+async function seedInvoices(client: any) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
@@ -66,7 +67,7 @@ async function seedInvoices(client) {
     // Insert data into the "invoices" table
     const insertedInvoices = await Promise.all(
       invoices.map(
-        (invoice) => client.sql`
+        (invoice: any) => client.sql`
         INSERT INTO invoices (customer_id, amount, status, date)
         VALUES (${invoice.customer_id}, ${invoice.amount}, ${invoice.status}, ${invoice.date})
         ON CONFLICT (id) DO NOTHING;
@@ -86,7 +87,7 @@ async function seedInvoices(client) {
   }
 }
 
-async function seedCustomers(client) {
+async function seedCustomers(client: any) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
@@ -105,7 +106,7 @@ async function seedCustomers(client) {
     // Insert data into the "customers" table
     const insertedCustomers = await Promise.all(
       customers.map(
-        (customer) => client.sql`
+        (customer: any) => client.sql`
         INSERT INTO customers (id, name, email, image_url)
         VALUES (${customer.id}, ${customer.name}, ${customer.email}, ${customer.image_url})
         ON CONFLICT (id) DO NOTHING;
@@ -125,7 +126,7 @@ async function seedCustomers(client) {
   }
 }
 
-async function seedRevenue(client) {
+async function seedRevenue(client: any) {
   try {
     // Create the "revenue" table if it doesn't exist
     const createTable = await client.sql`
@@ -140,7 +141,7 @@ async function seedRevenue(client) {
     // Insert data into the "revenue" table
     const insertedRevenue = await Promise.all(
       revenue.map(
-        (rev) => client.sql`
+        (rev: any) => client.sql`
         INSERT INTO revenue (month, revenue)
         VALUES (${rev.month}, ${rev.revenue})
         ON CONFLICT (month) DO NOTHING;
@@ -161,12 +162,16 @@ async function seedRevenue(client) {
 }
 
 async function main() {
-  const client = await db.connect();
+  const isDevelopment = isDevelopmentEnv();
+  console.log({isDevelopment});
+
+  const client = await pgClient();
+  await client.connect();
 
   await seedUsers(client);
-  await seedCustomers(client);
-  await seedInvoices(client);
-  await seedRevenue(client);
+  // await seedCustomers(client);
+  // await seedInvoices(client);
+  // await seedRevenue(client);
 
   await client.end();
 }
