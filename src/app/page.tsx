@@ -1,6 +1,11 @@
 import MainLogo from 'components/main-logo';
+import { list } from 'models/model';
+import StoreList from 'components/stores/store_list';
 
-export default function Page() {
+export default async function Page() {
+  const stores = await list({ name: 'store' });  
+  console.log({stores});
+
   return (
     <main className="flex min-h-screen flex-col p-6">            
       <div className="flex h-20 w-full items-end rounded-lg bg-blue-500 p-3 md:h-36">
@@ -14,8 +19,9 @@ export default function Page() {
             <strong>Welcome to Orders SaaS</strong><br/>
             Your tailored solution for small retailers order management needs. Simplify order processing, tracking, inventory management, and fulfillment. Ideal for small-scale retail businesses looking to streamline operations.
           </p>          
-        </div>        
+        </div>
       </div>
+      <StoreList stores={stores} />
     </main>
   );
 }
