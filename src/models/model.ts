@@ -13,7 +13,7 @@ export async function list({ name, limit = 100 }) {
     return data.rows;
   } 
   catch (err) {
-    console.error('model.list:', err);
-    return [];
+    console.error('model.list:', err);    
+    throw new Error('Failed to fetch data.');
   }
 }

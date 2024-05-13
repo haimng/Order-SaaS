@@ -26,7 +26,7 @@ export default async function Page() {
         </div>
       </div>
       <h2>Store List</h2>
-      <Suspense>
+      <Suspense key="stores">
         <StoreList stores={stores} />
       </Suspense>      
     </main>
