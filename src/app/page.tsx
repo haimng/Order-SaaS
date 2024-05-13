@@ -21,6 +21,7 @@ export default async function Page() {
           </p>          
         </div>
       </div>
+      <h2>Store List</h2>
       <StoreList stores={stores} />
     </main>
   );
