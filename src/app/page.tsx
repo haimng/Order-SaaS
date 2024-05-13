@@ -1,13 +1,12 @@
 import MainLogo from 'components/main-logo';
-import { list } from 'models/model';
+import { list } from 'models/store_model';
 import StoreList from 'components/stores/store_list';
-import { Suspense } from 'react';
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0;
+// export const dynamic = 'force-dynamic'
+// export const revalidate = 0;
 
 export default async function Page() {
-  const stores = await list({ name: 'store' });  
+  const stores = await list({});
   console.log({stores});
 
   return (
@@ -26,9 +25,7 @@ export default async function Page() {
         </div>
       </div>
       <h2>Store List</h2>
-      <Suspense key="stores">
-        <StoreList stores={stores} />
-      </Suspense>      
+      <StoreList stores={stores} />
     </main>
   );
 }

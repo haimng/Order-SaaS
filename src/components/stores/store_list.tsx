@@ -1,14 +1,13 @@
-// 'use client';
+'use client';
 
-// import { useState } from 'react';
+import { useState } from 'react';
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 export default function StoreList(props) {
-  const stores = props.stores;
-  // const [stores, setStores] = useState(props.stores);
+  const [stores, setStores] = useState(props.stores);
   
   async function test(id) {
-    // setStores(stores.filter(store => store.id != id));
+    setStores(stores.filter(store => store.id != id));
   }
 
   return (
@@ -26,7 +25,7 @@ export default function StoreList(props) {
                     <div className="mb-2 flex items-center">                      
                       <p>{store.name}</p>
                     </div>                    
-                    <button>
+                    <button onClick={() => { test(store.id) }}>
                       <TrashIcon className="w-5" />
                     </button>
                   </div>                  
