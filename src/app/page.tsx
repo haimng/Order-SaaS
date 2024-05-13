@@ -1,6 +1,7 @@
 import MainLogo from 'components/main-logo';
 import { list } from 'models/model';
 import StoreList from 'components/stores/store_list';
+import { Suspense } from 'react';
 
 export default async function Page() {
   const stores = await list({ name: 'store' });  
@@ -22,7 +23,9 @@ export default async function Page() {
         </div>
       </div>
       <h2>Store List</h2>
-      <StoreList stores={stores} />
+      <Suspense>
+        <StoreList stores={stores} />
+      </Suspense>      
     </main>
   );
 }
