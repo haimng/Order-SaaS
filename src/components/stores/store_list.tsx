@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 export default function StoreList(props) {
   const [stores, setStores] = useState(props.stores);
@@ -23,8 +24,8 @@ export default function StoreList(props) {
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
                     <div className="mb-2 flex items-center">                      
-                      <p>{store.name}</p>
-                    </div>                    
+                      <p><Link href={`/stores/${store.id}`}>{store.name}</Link></p>
+                    </div>                         
                     <button onClick={() => { test(store.id) }}>
                       <TrashIcon className="w-5" />
                     </button>
