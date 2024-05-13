@@ -3,6 +3,9 @@ import { list } from 'models/model';
 import StoreList from 'components/stores/store_list';
 import { Suspense } from 'react';
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0;
+
 export default async function Page() {
   const stores = await list({ name: 'store' });  
   console.log({stores});
